@@ -1,0 +1,45 @@
+class Solution(object):
+
+    def findSubstring(self, s, words):
+        word_count = Counter(words)
+        total_length = len(s)
+        num_words = len(words)
+        word_length = len(words[0])
+      
+        
+        start_indices = []
+      
+        
+        for offset in range(word_length):
+            left = right = offset
+            window_word_count = Counter()
+            total_matched_words = 0
+          
+            
+            while right + word_length <= total_length:
+                word = s[right: right + word_length]
+                right += word_length
+              
+                
+                if word not in word_count:
+                    left = right
+                    window_word_count.clear()
+                    total_matched_words = 0
+                    continue
+              
+                
+                window_word_count[word] += 1
+                total_matched_words += 1
+              
+               
+                while window_word_count[word] > word_count[word]:
+                    word_to_remove = s[left: left + word_length]
+                    left += word_length
+                    window_word_count[word_to_remove] -= 1
+                    total_matched_words -= 1
+              
+                
+                if total_matched_words == num_words:
+                    start_indices.append(left)
+      
+        return start_indices
